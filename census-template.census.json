@@ -1,0 +1,267 @@
+{
+  "schema": "hospital-census/1",
+  "meta": {
+    "hospital": "B.P. Koirala Memorial Hospital",
+    "hospital_ne": "बी.पी. कोइराला मेमोरियल क्यान्सर अस्पताल",
+    "date_bs": "2083/06/01"
+  },
+  "summary": {
+    "admissions": 25,
+    "discharges": 28,
+    "new_diagnosed": 15,
+    "day_care": [
+      32,
+      3
+    ]
+  },
+  "bipanna_sewa": {
+    "Ministry of Health": 83,
+    "Bagmati Province": 9,
+    "Gandaki Province": 1,
+    "Health Insurance": 95
+  },
+  "services": {
+    "Radiology": {
+      "USG": 47,
+      "CT-SCAN": 24,
+      "MRI": 0,
+      "X-RAY": 36,
+      "Mammogram": 2,
+      "USG FNAC": 0,
+      "USG Guided FNAC": 1,
+      "CT Guided FNAC": 0
+    },
+    "Surgery": {
+      "Major": 2,
+      "Minor": 3,
+      "NPL": 3,
+      "Colposcopy": 1,
+      "Endoscopy": 1,
+      "Colonoscopy": 1,
+      "Cystoscopy": 1
+    },
+    "Pathology": {
+      "Biochemistry": 0,
+      "Hematology": 0,
+      "Serology": 0,
+      "Immunoserology": 0,
+      "IHC": 3,
+      "Microbiology": 0,
+      "LBC": 8,
+      "FNAC": 4,
+      "Biopsy": 24,
+      "Flowcytometry": 0,
+      "Cytology": 0
+    },
+    "Radiotherapy": {
+      "3D-CRT": 0,
+      "Brachytherapy": 3,
+      "Cobalt": 0,
+      "Planning": 0,
+      "Countering": 0,
+      "IMRT": 0,
+      "LINAC": 43,
+      "Simulation": 0,
+      "VMAT": 0,
+      "VC Treatment": 0
+    },
+    "Operation Theatre": {
+      "Major": 7,
+      "Minor": 55,
+      "Intermediate": 2,
+      "Dressing": 0,
+      "Thyridectomy": 0,
+      "Suture out": 3
+    },
+    "ECG": {
+      "ECG": 0
+    },
+    "ECHO": {
+      "ECHO": 0
+    }
+  },
+  "opd": [
+    {
+      "dept": "RADIATION ONCOLOGY DEPT",
+      "new": 2,
+      "old": 38,
+      "ehs": 0
+    },
+    {
+      "dept": "BREAST SURGERY UNIT",
+      "new": 15,
+      "old": 27,
+      "ehs": 0
+    },
+    {
+      "dept": "NEURO SURGERY UNIT",
+      "new": 1,
+      "old": 6,
+      "ehs": 0
+    },
+    {
+      "dept": "PAIN & PALLATIVE CARE",
+      "new": 0,
+      "old": 19,
+      "ehs": 0
+    },
+    {
+      "dept": "LUNG & GI ONCOLOGY UNIT",
+      "new": 18,
+      "old": 33,
+      "ehs": 0
+    },
+    {
+      "dept": "ENT HEAD/NECK & BREAST ONCOLOGY UNIT",
+      "new": 5,
+      "old": 23,
+      "ehs": 0
+    },
+    {
+      "dept": "UROLOGY SURGERY UNIT",
+      "new": 10,
+      "old": 33,
+      "ehs": 0
+    },
+    {
+      "dept": "EMERGENCY",
+      "new": 2,
+      "old": 67,
+      "ehs": 0
+    },
+    {
+      "dept": "GI SURGERY UNIT",
+      "new": 3,
+      "old": 1,
+      "ehs": 0
+    },
+    {
+      "dept": "UROGENITAL/SARCOMA ONCOLOGY UNIT",
+      "new": 3,
+      "old": 10,
+      "ehs": 0
+    },
+    {
+      "dept": "GYNECOLOGY SURGERY UNIT",
+      "new": 2,
+      "old": 1,
+      "ehs": 0
+    },
+    {
+      "dept": "THORACIC SURGERY UNIT",
+      "new": 0,
+      "old": 12,
+      "ehs": 0
+    },
+    {
+      "dept": "HEAD AND NECK SURGERY UNIT",
+      "new": 0,
+      "old": 0,
+      "ehs": 0
+    },
+    {
+      "dept": "PAEDIATRIC ONCOLOGY UNIT",
+      "new": 0,
+      "old": 0,
+      "ehs": 0
+    },
+    {
+      "dept": "ORTHOPEDIC UNIT",
+      "new": 0,
+      "old": 0,
+      "ehs": 0
+    }
+  ],
+  "inpatient": [
+    {
+      "ward": "RADIATION ONCOLOGY DEPT",
+      "beds": 21,
+      "admit": 21,
+      "mortality": 0
+    },
+    {
+      "ward": "BREST SURGERY UNIT",
+      "beds": 7,
+      "admit": 7,
+      "mortality": 0
+    },
+    {
+      "ward": "NEURO SURGERY UNIT",
+      "beds": 10,
+      "admit": 10,
+      "mortality": 0
+    },
+    {
+      "ward": "PAIN & PALLATIVE CARE",
+      "beds": 3,
+      "admit": 1,
+      "mortality": 0
+    },
+    {
+      "ward": "LUNG & GI ONCOLOGY UNIT",
+      "beds": 11,
+      "admit": 11,
+      "mortality": 0
+    },
+    {
+      "ward": "ENT HEAD/NECK & BREAST ONCOLOGY UNIT",
+      "beds": 10,
+      "admit": 6,
+      "mortality": 0
+    },
+    {
+      "ward": "UROLOGY SURGERY UNIT",
+      "beds": 4,
+      "admit": 2,
+      "mortality": 0
+    },
+    {
+      "ward": "EMERGENCY",
+      "beds": 4,
+      "admit": 3,
+      "mortality": 0
+    },
+    {
+      "ward": "GI SURGERY UNIT",
+      "beds": 4,
+      "admit": 4,
+      "mortality": 0
+    },
+    {
+      "ward": "UROGENITAL/SARCOMA ONCOLOGY UNIT",
+      "beds": 5,
+      "admit": 5,
+      "mortality": 0
+    },
+    {
+      "ward": "GYNECOLOGY SURGERY UNIT",
+      "beds": 12,
+      "admit": 12,
+      "mortality": 0
+    },
+    {
+      "ward": "THORACIC SURGERY UNIT",
+      "beds": 12,
+      "admit": 12,
+      "mortality": 0
+    },
+    {
+      "ward": "HEAD AND NECK SURGERY UNIT",
+      "beds": 0,
+      "admit": 0,
+      "mortality": 0
+    },
+    {
+      "ward": "PAEDIATRIC ONCOLOGY UNIT",
+      "beds": 0,
+      "admit": 0,
+      "mortality": 0
+    },
+    {
+      "ward": "ORTHOPEDIC UNIT",
+      "beds": 0,
+      "admit": 0,
+      "mortality": 0
+    }
+  ]
+}

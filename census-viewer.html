@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Daily Hospital Census Viewer</title>
+    <style>
+      :root {
+        --bg: #edf2f8;
+        --card: #fff;
+        --tx: #17243a;
+        --navy: #183b78;
+        --green: #8b1f3b;
+        --bd: #b8c5d7;
+        --mut: #58677c;
+        --in: #fff;
+        --pale: #e8eef7;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0e1622;
+          --card: #17212f;
+          --tx: #e6edf6;
+          --navy: #2c5ea8;
+          --green: #1c9a76;
+          --bd: #35506f;
+          --mut: #9aabc0;
+          --in: #0e1622;
+          --pale: #223047;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tx);
+        font: 14px system-ui, sans-serif;
+        padding: 12px;
+      }
+
+      .w {
+        max-width: 900px;
+        margin: auto;
+        background: var(--card);
+        padding: 16px;
+        border-top: 5px solid var(--navy);
+        box-shadow: 0 8px 28px rgba(24, 59, 120, 0.1);
+      }
+
+      .masthead {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 4px 8px 12px;
+        border-bottom: 2px solid var(--green);
+        text-align: center;
+      }
+
+      .print-masthead {
+        display: none;
+      }
+
+      .logo-frame {
+        position: relative;
+        flex: 0 0 94px;
+        width: 94px;
+        height: 94px;
+        overflow: hidden;
+        border: 2px solid var(--navy);
+        border-radius: 50%;
+        background: #fff;
+      }
+
+      .logo-frame img {
+        position: absolute;
+        width: 360px;
+        max-width: none;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .brand-name {
+        margin: 0;
+        color: var(--navy);
+        font-size: 19px;
+        font-weight: 800;
+      }
+
+      .brand-name-ne {
+        margin: 3px 0 0;
+        color: var(--green);
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: 16px;
+        text-align: center;
+        margin: 10px 0 8px;
+        color: var(--navy);
+        letter-spacing: 0.5px;
+      }
+
+      .bar {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      button {
+        background: var(--navy);
+        color: #fff;
+        border: 0;
+        border-radius: 6px;
+        padding: 7px 11px;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      button.s {
+        background: var(--green);
+      }
+
+      input,
+      textarea {
+        background: var(--in);
+        color: var(--tx);
+        border: 1px solid var(--bd);
+        border-radius: 6px;
+        padding: 4px;
+        font: inherit;
+      }
+
+      input[type="number"] {
+        width: 60px;
+        text-align: center;
+      }
+
+      .meta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
+        padding: 10px;
+        background: var(--pale);
+        border-left: 4px solid var(--green);
+      }
+
+      .date-field {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: 190px;
+        padding: 8px 12px;
+        border: 1px solid var(--bd);
+        border-left: 3px solid var(--green);
+        border-radius: 5px;
+        background: var(--card);
+        font-weight: 700;
+      }
+
+      .date-field strong {
+        color: var(--navy);
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .date-field input {
+        width: 100% !important;
+        max-width: 220px;
+        padding: 2px 0;
+        border: 0;
+        background: transparent;
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .c {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-top: 3px solid var(--navy);
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .c input[type="number"] {
+        width: 70px;
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .c small {
+        display: block;
+        color: var(--mut);
+        font-weight: 600;
+        font-size: 11px;
+        margin-top: 2px;
+      }
+
+      .c b {
+        font-size: 22px;
+      }
+
+      .lb {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        margin: 2px 0;
+        gap: 4px;
+      }
+
+      .lb input {
+        width: 52px;
+      }
+
+      h2 {
+        background: var(--navy);
+        color: #fff;
+        text-align: center;
+        font-size: 13px;
+        margin: 12px 0 0;
+        padding: 5px;
+      }
+
+      h2.g {
+        background: var(--green);
+      }
+
+      .print-date {
+        display: none;
+      }
+
+      .diag {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 8px;
+        border: 1px solid var(--bd);
+        border-top: 0;
+        padding: 8px;
+        background: var(--card);
+      }
+
+      .b {
+        border: 1px solid var(--bd);
+        border-radius: 4px;
+        padding: 6px;
+      }
+
+      .b h3 {
+        margin: 0 0 4px;
+        font-size: 12px;
+        color: var(--navy);
+      }
+
+      .sc {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card);
+        min-width: 520px;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--bd);
+        padding: 3px 6px;
+        text-align: center;
+      }
+
+      td:nth-child(2) {
+        text-align: left;
+      }
+
+      th {
+        background: var(--pale);
+      }
+
+      tfoot td {
+        font-weight: 700;
+        background: var(--pale);
+      }
+
+      textarea {
+        width: 100%;
+        height: 130px;
+        margin-top: 6px;
+        font-size: 15px;
+      }
+
+      #msg {
+        color: var(--mut);
+        font-size: 12px;
+        margin: 4px 0;
+      }
+
+      @media (max-width: 540px) {
+        .w {
+          padding: 10px;
+        }
+
+        .masthead {
+          gap: 10px;
+          padding-inline: 0;
+        }
+
+        .logo-frame {
+          flex-basis: 74px;
+          width: 74px;
+          height: 74px;
+        }
+
+        .logo-frame img {
+          width: 284px;
+        }
+
+        .brand-name {
+          font-size: 16px;
+        }
+
+        .brand-name-ne {
+          font-size: 14px;
+        }
+      }
+
+      @page {
+        size: A4 landscape;
+        margin: 9mm;
+      }
+
+      @media print {
+        :root {
+          --bg: #fff;
+          --card: #fff;
+          --tx: #17243a;
+          --navy: #183b78;
+          --green: #8b1f3b;
+          --bd: #aab6c8;
+          --mut: #58677c;
+          --in: #fff;
+          --pale: #e8eef7;
+        }
+
+        .bar,
+        #post,
+        #msg {
+          display: none;
+        }
+
+        body {
+          padding: 0;
+          background: #fff;
+          font-size: 10px;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .w {
+          max-width: none;
+          padding: 0;
+          border-top-width: 3px;
+          box-shadow: none;
+        }
+
+        .masthead {
+          padding: 0 0 6px;
+        }
+
+        .print-masthead {
+          display: flex;
+          margin-bottom: 4px;
+          break-inside: avoid;
+          page-break-inside: avoid;
+          break-after: avoid-page;
+          page-break-after: avoid;
+        }
+
+        .logo-frame {
+          flex-basis: 68px;
+          width: 68px;
+          height: 68px;
+        }
+
+        .logo-frame img {
+          width: 260px;
+        }
+
+        .brand-name {
+          font-size: 15px;
+        }
+
+        .brand-name-ne {
+          font-size: 13px;
+        }
+
+        h1 {
+          margin: 6px 0;
+          font-size: 13px;
+        }
+
+        .meta {
+          gap: 8px;
+          margin-bottom: 6px;
+          padding: 5px;
+        }
+
+        .date-field {
+          min-width: 180px;
+          padding: 5px 9px;
+        }
+
+        .date-field strong {
+          font-size: 9px;
+        }
+
+        .date-field input {
+          max-width: none;
+          font-size: 14px;
+        }
+
+        .cards {
+          gap: 4px;
+          margin-bottom: 5px;
+        }
+
+        .c {
+          padding: 5px;
+        }
+
+        .c input[type="number"] {
+          font-size: 15px;
+        }
+
+        h2 {
+          margin-top: 7px;
+          padding: 3px;
+          font-size: 10px;
+        }
+
+        .print-date {
+          display: block;
+          margin-top: 2px;
+          font-size: 9px;
+          font-weight: 400;
+          letter-spacing: 0;
+        }
+
+        .diag {
+          gap: 4px;
+          padding: 4px;
+        }
+
+        .b {
+          padding: 3px;
+        }
+
+        .lb {
+          margin: 0;
+          font-size: 9px;
+        }
+
+        .sc {
+          overflow: visible;
+        }
+
+        table {
+          min-width: 0;
+          font-size: 9px;
+        }
+
+        th,
+        td {
+          padding: 2px 4px;
+        }
+
+        input {
+          border: 0;
+          padding: 0;
+          color: #17243a;
+          background: transparent;
+          appearance: none;
+          -webkit-appearance: none;
+        }
+
+        input[type="number"] {
+          width: 42px;
+        }
+
+        .meta input {
+          width: auto !important;
+        }
+
+        .c input[type="number"] {
+          width: 52px;
+        }
+
+        .diag,
+        table,
+        tr,
+        .c {
+          break-inside: avoid;
+        }
+
+        .print-page {
+          break-before: page;
+          page-break-before: always;
+        }
+
+        .print-section-title {
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="w">
+      <div class="bar">
+        <button onclick="$('file').click()">Load day</button>
+        <button onclick="newDay()">New day</button>
+        <button class="s" onclick="save()">Save day</button>
+        <button onclick="copyJ()">Copy JSON</button>
+        <button onclick="print()">Print / PDF</button>
+        <input type="file" id="file" accept=".json,application/json" hidden />
+      </div>
+      <div id="msg">Tip: you can also drag a .census.json file onto this page.</div>
+      <header class="masthead">
+        <div class="logo-frame"><img src="bpkmch_logo.jpeg" alt="BPKMCH seal" /></div>
+        <div>
+          <p class="brand-name" id="hospital-name"></p>
+          <p class="brand-name-ne" id="hospital-name-ne"></p>
+        </div>
+      </header>
+      <div class="meta" id="meta"></div>
+      <h1>DAILY HOSPITAL CENSUS &amp; SERVICE SUMMARY</h1>
+      <div class="cards" id="cards"></div>
+      <header class="masthead print-masthead print-page">
+        <div class="logo-frame"><img src="bpkmch_logo.jpeg" alt="BPKMCH seal" /></div>
+        <div>
+          <p class="brand-name print-hospital-name"></p>
+          <p class="brand-name-ne print-hospital-name-ne"></p>
+        </div>
+      </header>
+      <h2 class="print-section-title">DIAGNOSTIC &amp; THERAPEUTIC SERVICES<span class="print-date"></span></h2>
+      <div class="diag" id="diag"></div>
+      <header class="masthead print-masthead print-page">
+        <div class="logo-frame"><img src="bpkmch_logo.jpeg" alt="BPKMCH seal" /></div>
+        <div>
+          <p class="brand-name print-hospital-name"></p>
+          <p class="brand-name-ne print-hospital-name-ne"></p>
+        </div>
+      </header>
+      <h2 class="print-section-title">OPD SUMMARY<span class="print-date"></span></h2>
+      <div class="sc"><table id="opd"></table></div>
+      <header class="masthead print-masthead print-page">
+        <div class="logo-frame"><img src="bpkmch_logo.jpeg" alt="BPKMCH seal" /></div>
+        <div>
+          <p class="brand-name print-hospital-name"></p>
+          <p class="brand-name-ne print-hospital-name-ne"></p>
+        </div>
+      </header>
+      <h2 class="g print-section-title">INPATIENT STATUS<span class="print-date"></span></h2>
+      <div class="sc"><table id="ipd"></table></div>
+    </div>
+    <script>
+const $=id=>document.getElementById(id);
+let S={"schema": "hospital-census/1", "meta": {"hospital": "B.P. Koirala Memorial Hospital", "hospital_ne": "बी.पी. कोइराला मेमोरियल क्यान्सर अस्पताल", "date_bs": "2083/04/01"}, "summary": {"admissions": 0, "discharges": 0, "new_diagnosed": 0, "day_care": [0, 0]}, "bipanna_sewa": {"Ministry of Health": 0, "Bagmati Province": 0, "Gandaki Province": 0, "Lumbini Province": 0, "Health Insurance": 0}, "services": {"Radiology": {"USG": 0, "USG Guided FNAC": 0, "USG Doppler": 0, "USG Guided Pig-Tail": 1, "Mammography": 2, "CT Scan": 24, "X-ray": 36, "Portable X-ray": 1}, "Surgery": {"Major": 2, "Minor": 3, "NPL": 3, "Colposcopy": 1, "Endoscopy": 1, "Colonoscopy": 0, "Cystoscopy": 0}, "Histopathology": {"Biopsy": 0, "FNAC": 0, "LBC": 0, "IHC": 0}, "Radiotherapy": {"Linac IX": 0, "Brachytherapy": 0}, "Dressing": {"Suture Out": 0, "Major": 0, "Medium": 0, "Minor": 0}, "ECG": {"ECG": 0}}, "opd": [{"dept": "Medical Oncology Unit I", "new": 0, "old": 0, "ehs": 0}, {"dept": "Medical Oncology Unit II", "new": 0, "old": 0, "ehs": 0}, {"dept": "Palliative Care", "new": 0, "old": 0, "ehs": 0}, {"dept": "Pediatric Oncology", "new": 0, "old": 0, "ehs": 0}, {"dept": "Surgical Oncology Unit II", "new": 0, "old": 0, "ehs": 0}, {"dept": "Head & Neck Oncology Unit I", "new": 0, "old": 0, "ehs": 0}, {"dept": "Gynae Oncology Unit I", "new": 0, "old": 0, "ehs": 0}, {"dept": "Radiation Oncology Unit I", "new": 0, "old": 0, "ehs": 0}, {"dept": "Wellness Clinic", "new": 0, "old": 0, "ehs": 0}, {"dept": "MSK Oncology", "new": 0, "old": 0, "ehs": 0}, {"dept": "Neuro Surgical Oncology", "new": 0, "old": 0, "ehs": 0}, {"dept": "ACUTE ", "new": 0, "old": 0, "ehs": 0}], "inpatient": [{"ward": "MEDICAL", "beds": 38, "admit": 0, "mortality": 0}, {"ward": "PEADIATIRC", "beds": 37, "admit": 0, "mortality": 0}, {"ward": "HAEMATOONCOLOGY", "beds": 27, "admit": 0, "mortality": 0}, {"ward": "URO ONCOLOGY", "beds": 25, "admit": 0, "mortality": 0}, {"ward": "ENT ONCOLOGY", "beds": 29, "admit": 0, "mortality": 0}, {"ward": "NEURO ONCOLOGY", "beds": 8, "admit": 0, "mortality": 0}, {"ward": "GI ONCOLOGY", "beds": 20, "admit": 0, "mortality": 0}, {"ward": "BREAST ONCOLOGY", "beds": 14, "admit": 0, "mortality": 0}, {"ward": "THORACIC ONCOLOGY", "beds": 20, "admit": 0, "mortality": 0}, {"ward": "ORTHO ONCOLOGY UNIT", "beds": 18, "admit": 0, "mortality": 0}, {"ward": "ICU", "beds": 18, "admit": 0, "mortality": 0}, {"ward": "POST OPERATIVE", "beds": 13, "admit": 0, "mortality": 0}, {"ward": "HDU", "beds": 8, "admit": 0, "mortality": 0}, {"ward": "DIALYSIS", "beds": 4, "admit": 0, "mortality": 0}, {"ward": "CABIN", "beds": 13, "admit": 0, "mortality": 0}, {"ward": "GYNAE ONCOLOGY", "beds": 34, "admit": 0, "mortality": 0}, {"ward": "RADIATION ONCOLOGY", "beds": 25, "admit": 0, "mortality": 0}, {"ward": "HOSPICE & PALLIATIVE", "beds": 15, "admit": 0, "mortality": 0}, {"ward": "NEW PAYING", "beds": 34, "admit": 0, "mortality": 0}, {"ward": "URGENT CARE", "beds": 24, "admit": 0, "mortality": 0}]};
+S.services={"Radiology":{"CT-SCAN":0,"MRI":0,"USG":0,"CT Guided Biopsy":0,"USG Guided Biopsy":0,"USG Guided FNAC":0,"Mammography":0,"Mammography Guided Biopsy":0,"General & Special X-ray":0},"Endoscopic Procedures":{"Upper GI Endoscopy":0,"Colonoscopy":0,"Bronchoscopy":0,"NPL":0,"Sigmoidoscopy":0,"Colposcopy":0, "ERCP":0, "PICC (Insertion)":0,"PICC (Maintainence)":0,"Others":0},"Pathology":{"Biochemistry":0,"Hematology":0,"Microbiology":0,"Serology":0,"Clinical pathology":0,"Immunoserology":0,"Immunohistochemistry":0,"Major Biopsy (Histopathology)":0,"Minor Biopsy (Histopathology)":0,"LBC":0,"FNAC":0, "Fluid Cytology":0, "Slide Review":0, "Major (Grossing)":0, "Minor (Grossing)":0, "PBS": 0, "Bone marrow": 0},"Radiotherapy":{"Simulation":0,"Counting & Planning":0,"Treatment(3D-CRT, VMAT, IMRT, SRS, IGRT)":0,"Brachytherapy":0,"Replanning":0},"Operation Theatre":{"Major":0,"Minor":0,"Intermediate":0},"ECG":{"ECG":0},"ECHO":{"ECHO":0}, "EHS":{"Radiotherapy":0, "Pathology":0, "Radiology":0, "Surgery": 0}};
+S.opd=[{"dept":"ENT HEAD/NECK & BREAST ONCOLOGY","new":0,"old":0, "ehs": 0},{"dept":"UROGENITAL/SARCOMA ONCOLOGY UNIT","new":0,"old":0,"ehs":0},{"dept":"UROLOGY","new":0,"old":0,"ehs":0},{"dept":"HEAD & NECK","new":0,"old":0,"ehs":0},{"dept":"NUCLEAR MEDICINE","new":0,"old":0,"ehs":0}, {"dept":"PAEDIATRIC","new":0,"old":0,"ehs":0},{"dept":"PAIN & PALLIATIVE","new":0,"old":0,"ehs":0},{"dept":"RADIATION ONCOLOGY","new":0,"old":0,"ehs":0},{"dept":"GYNAECOLOGY","new":0,"old":0,"ehs":0},{"dept":"THORACIC","new":0,"old":0,"ehs":0},{"dept":"NEURO SURGERY","new":0,"old":0,"ehs":0}, {"dept":"BREAST SURGERY","new":0,"old":0,"ehs":0},{"dept":"GI SURGERY","new":0,"old":0,"ehs":0},{"dept":"PHYSIOTHERAPY","new":0,"old":0,"ehs":0},{"dept":"ORTHOPEDIC","new":0,"old":0,"ehs":0},{"dept":"LUNG & GI ONCOLOGY","new":0,"old":0,"ehs":0}, {"dept":"EMERGENCY","new":0,"old":0,"ehs":0}, {"dept":"Others","new":0,"old":0,"ehs":0}];
+const say = (t) => ($('msg').textContent = t);
+const num = (p, v) => `<input type="number" min="0" data-p="${p}" value="${v}">`;
+const txt = (p, v, w, placeholder = '') => `<input data-p="${p}" value="${String(v).replace(/"/g, '&quot;')}" placeholder="${placeholder}" style="width:${w}px">`;
+const sum = (a) => a.reduce((x, y) => x + y, 0);
+
+function render() {
+  $('hospital-name').textContent = S.meta.hospital;
+  $('hospital-name-ne').textContent = S.meta.hospital_ne;
+  updatePrintMastheads();
+  $('meta').innerHTML = `<label class="date-field"><strong>Date (BS)</strong> ${txt('meta.date_bs', S.meta.date_bs, 130, 'YYYY/MM/DD')}</label><label class="date-field"><strong></strong> ${txt('meta.date_ad', S.meta.date_ad || '', 180, 'October 14, 2026')}</label>`;
+  updatePrintDates();
+  const s = S.summary;
+  $('cards').innerHTML =
+    [['admissions', 'ADMISSIONS'], ['discharges', 'DISCHARGES'], ['new_diagnosed', 'NEW DIAGNOSED CANCER PATIENT']]
+      .map(([k, l]) => `<div class=c>${num('summary.' + k, s[k])}<small>${l}</small></div>`)
+      .join('') +
+    `<div class=c><b id=dct></b> ${num('summary.day_care.0', s.day_care[0])}+${num('summary.day_care.1', s.day_care[1])}<small>CHEMOTHERAPY(Ward + Daycare)</small></div>` +
+    `<div class=c><small>BIPANNA SEWA</small>${Object.entries(S.bipanna_sewa)
+      .map(([k, v]) => `<div class=lb>${k}${num('bipanna_sewa.' + k, v)}</div>`)
+      .join('')}</div>`;
+  $('diag').innerHTML = Object.entries(S.services)
+    .map(([g, o]) => `<div class=b><h3>${g.toUpperCase()}</h3>${Object.entries(o)
+      .map(([k, v]) => `<div class=lb>${k}${num(`services.${g}.${k}`, v)}</div>`)
+      .join('')}</div>`)
+    .join('');
+  $('opd').innerHTML = `<thead><tr><th>S.No</th><th>Department</th><th>New</th><th>Paid Followup</th><th>Free Followup</th><th>Total</th></tr></thead><tbody>${S.opd
+    .map((r, i) => `<tr><td>${i + 1}</td><td>${r.dept}</td><td>${num(`opd.${i}.new`, r.new)}</td><td>${num(`opd.${i}.old`, r.old)}</td><td>${num(`opd.${i}.ehs`, r.ehs)}</td><td class=t></td></tr>`)
+    .join('')}</tbody><tfoot><tr><td colspan=2>TOTAL</td><td id=tn></td><td id=to></td><td id=te></td><td id=tt></td></tr></tfoot>`;
+  $('ipd').innerHTML = `<thead><tr><th>S.No</th><th>Ward</th><th>Beds</th><th>Total</th><th>Vacant</th><th>Mortality</th></tr></thead><tbody>${S.inpatient
+    .map((r, i) => `<tr><td>${i + 1}</td><td>${r.ward}</td><td>${num(`inpatient.${i}.beds`, r.beds)}</td><td>${num(`inpatient.${i}.admit`, r.admit)}</td><td class=v></td><td>${num(`inpatient.${i}.mortality`, r.mortality)}</td></tr>`)
+    .join('')}</tbody><tfoot><tr><td colspan=2>TOTAL</td><td id=ib></td><td id=ia></td><td id=iv></td><td id=im></td></tr></tfoot>`;
+  calc();
+}
+
+function updatePrintMastheads() {
+  document.querySelectorAll('.print-hospital-name').forEach((el) => (el.textContent = S.meta.hospital));
+  document.querySelectorAll('.print-hospital-name-ne').forEach((el) => (el.textContent = S.meta.hospital_ne));
+}
+
+function updatePrintDates() {
+  const label = `Date: ${S.meta.date_bs || 'Not entered'} | ${S.meta.date_ad || 'Not entered'}`;
+  document.querySelectorAll('.print-date').forEach((el) => (el.textContent = label));
+}
+
+function calc() {
+  $('dct').textContent = sum(S.summary.day_care);
+  let n = 0,
+    o = 0,
+    e = 0;
+  [...$('opd').tBodies[0].rows].forEach((r, i) => {
+    const d = S.opd[i];
+    r.querySelector('.t').textContent = d.new + d.old + d.ehs;
+    n += d.new;
+    o += d.old;
+    e += d.ehs;
+  });
+  tn.textContent = n;
+  to.textContent = o;
+  te.textContent = e;
+  tt.textContent = n + o + e;
+
+  let B = 0,
+    A = 0,
+    V = 0,
+    M = 0;
+  [...$('ipd').tBodies[0].rows].forEach((r, i) => {
+    const d = S.inpatient[i],
+      v = Math.max(d.beds - d.admit, 0);
+    r.querySelector('.v').textContent = v;
+    B += d.beds;
+    A += d.admit;
+    V += v;
+    M += d.mortality;
+  });
+  ib.textContent = B;
+  ia.textContent = A;
+  iv.textContent = V;
+  im.textContent = M;
+  const D = (x) => String(x).replace(/\d/g, (d) => '०१२३४५६७८९'[d]),
+    sv = S.services.Surgery || {},
+    rt = S.services.Radiotherapy || {};
+  if ($('ne')) $('ne').value = `${S.meta.hospital_ne} दैनिक सेवा प्रवाह विवरण\nनयाँ क्यान्सर बिरामी ${D(S.summary.new_diagnosed)}\nशल्यक्रिया ${D((sv.Major || 0) + (sv.Minor || 0))}\nभर्ना ${D(S.summary.admissions)}\nडिस्चार्ज ${D(S.summary.discharges)}\nरेडियोथेरापी ${D(sum(Object.values(rt)))}`;
+}
+document.addEventListener('input',e=>{
+ const p=e.target.dataset.p;if(!p)return;
+ const k=p.split('.');let o=S;for(let i=0;i<k.length-1;i++)o=o[k[i]];
+ o[k[k.length-1]]=e.target.type==='number'?(+e.target.value||0):e.target.value;
+ if(p==='meta.hospital')$('hospital-name').textContent=e.target.value;
+ if(p==='meta.hospital_ne')$('hospital-name-ne').textContent=e.target.value;
+ updatePrintMastheads();
+ updatePrintDates();
+ calc();
+});
+function load(f){if(!f)return;const r=new FileReader();r.onload=()=>{
+ let d;
+ try{d=JSON.parse(r.result)}catch{say('That file is not valid JSON.');return}
+ if(!d||typeof d!=='object'||!String(d.schema||'').startsWith('hospital-census')){say('That file is not a valid census file.');return}
+ S=d;render();say('Loaded '+f.name)
+};r.onerror=()=>say('Could not read that file.');r.readAsText(f)}
+$('file').onchange=e=>load(e.target.files[0]);
+addEventListener('dragover',e=>e.preventDefault());addEventListener('drop',e=>{e.preventDefault();load(e.dataTransfer.files[0])});
+function zero(o){for(const k in o){if(typeof o[k]==='number')o[k]=0;else if(typeof o[k]==='object')zero(o[k])}}
+function newDay(){const keep=S.inpatient.map(r=>r.beds);zero(S.summary);zero(S.bipanna_sewa);zero(S.services);S.opd.forEach(r=>{r.new=r.old=r.ehs=0});S.inpatient.forEach((r,i)=>{r.admit=0;r.mortality=0;r.beds=keep[i]});S.meta.date_bs='';S.meta.date_ad='';render();say('Cleared. Bed capacity kept. Enter the new date.')}
+function json(){return JSON.stringify(S,null,2)}
+function save(){const n='census-'+(S.meta.date_bs||'undated').replace(/\//g,'-')+'.census.json';
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([json()],{type:'application/json'}));a.download=n;a.click();say('Saved '+n)}
+function copyJ(){navigator.clipboard.writeText(json()).then(()=>say('JSON copied'),()=>say('Copy blocked; use Save day.'))}
+render();
+</script></body></html>
